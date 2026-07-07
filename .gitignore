@@ -1,0 +1,9 @@
+venv
+.vscode/
+backend/data
+backend/app/memory/user_memory.json
+__pycache__/
+backend/app/*.mp3
+backend/app/*.webm
+frontend/node_modules
+.env
