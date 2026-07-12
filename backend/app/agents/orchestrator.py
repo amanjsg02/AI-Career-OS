@@ -25,7 +25,7 @@ async def run(user_message,id):
         "memory_context":[memory_text]
     }
 
-    resume_result,memory_result,research_result=await asyncio.gather(resume_agent(state),memory_agent(state),research_agent(state))
+    resume_result,memory_result,research_result=await asyncio.gather(resume_agent.run(state),memory_agent.run(state),research_agent.run(state))
     await manager.send_progress(id,{
         "status":"running",
         "progress":50
@@ -33,14 +33,10 @@ async def run(user_message,id):
     state["resume_analysis"]=resume_result
     state["memory_analysis"]=memory_result
     state["market_analysis"]=research_result
-    state=await planner_agent(state)
+    state=await planner_agent.run(state)
     await manager.send_progress(id,{
         "status":"running",
         "progress":80
     })
-    response= await critic_agent(state)
-    await manager.send_progress(id,{
-        "status":"completed",
-        "progress":100
-    })
+    response= await critic_agent.run(state)
     return response

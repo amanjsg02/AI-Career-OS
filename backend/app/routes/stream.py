@@ -26,31 +26,25 @@ async def stream_chat(data:dict,
     })
     if "roadmap_generation" in intent:
         answer=await run(user_message,task_id)
-        return StreamingResponse(stream_llm_response(answer),
+        return StreamingResponse(stream_llm_response(answer,task_id),
                                  media_type="text/plain")
     elif "general_chat" in intent:
-        await manager.send_progress(id,{
-        "status":"completed",
-        "progress":100
-    })
-        return StreamingResponse(stream_llm_response(user_message),
+        
+        return StreamingResponse(stream_llm_response(user_message,task_id),
                                  media_type="text/plain")
     else:
       text=embed_text(user_message)
-      await manager.send_progress(id,{
+      await manager.send_progress(task_id,{
         "status":"running",
         "progress":50
     })
       text_memory=embed_memory(user_message)
-      await manager.send_progress(id,{
+      await manager.send_progress(task_id,{
         "status":"running",
         "progress":80
     })  
       prompt_data=build_prompt(user_message,text,text_memory)
-      await manager.send_progress(id,{
-        "status":"completed",
-        "progress":100
-    })
-      return StreamingResponse(stream_llm_response(prompt_data),
+      
+      return StreamingResponse(stream_llm_response(prompt_data,task_id),
                                media_type="text/plain")
     

@@ -93,7 +93,7 @@ async def prog(id,file_path):
         }
     )
     await manager.send_progress(id,{
-        "status":"running",
+        "status":"completed",
         "progress":100
 
     })
